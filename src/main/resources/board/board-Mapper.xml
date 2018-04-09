@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+	<!-- <select id="getBoardCount" resultType="int"> SELECT COUNT(*) FROM BOARD 
+		</select> -->
+
+	<select id="getBoardList" resultType="board.BoardVO">
+		select * from (select * from board order by num desc ) where rownum <![CDATA[ <= ]]>10
+	</select>
+
+	<select id="readBoard" parameterType="board.BoardVO" resultType="board.BoardVO">
+		select * from board where num = #{num}
+	</select>
+
+	<select id="getPassword" parameterType="board.BoardVO"
+		resultType="String">
+		select password from board where num=#{num}
+	</select>
+
+	<insert id="writeBoard" parameterType="board.BoardVO">
+		INSERT INTO board (num,
+		name, title,
+		content,boarddate,hit,password,favorcnt,hatecnt)
+		VALUES (SEQ_BOARD.NEXTVAL, #{name}, #{title},
+		#{content},sysdate,0,#{password},0,0 )
+	</insert>
+
+	<update id="addFavorcnt" parameterType="board.BoardVO">
+		UPDATE board
+		SET FAVORCNT=
+		(select favorcnt from board where num=#{num})+1
+		wHERE num = #{num}
+	</update>
+
+	<update id="addHatecnt" parameterType="board.BoardVO">
+		UPDATE board
+		SET hateCNT=
+		(select hatecnt from board where num=#{num})+1
+		wHERE num = #{num}
+	</update>
+
+	<update id="addHit" parameterType="board.BoardVO">
+		UPDATE board
+		SET hiT=
+		(select
+		hit from board where num=#{num})+1
+		wHERE num = #{num}
+	</update>
+
+	<delete id="deleteBoard" parameterType="board.BoardVO">
+		DELETE FROM board WHERE num = #{num}
+	</delete>
+	
+</mapper>

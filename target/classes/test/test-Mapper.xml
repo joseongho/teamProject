@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="TestDAO">
+
+	<select id="countAll" resultType="int">
+		SELECT count(*) FROM test
+	</select>
+
+	<select id="getQuestion" parameterType="test.TestVO" resultType="test.TestVO">
+		select * from ( select * from(SELECT * FROM test where rownum <![CDATA[ <= ]]>
+		#{qno})
+		order by qno desc ) where rownum=1
+	</select>
+
+	<insert id="insertTest" parameterType="test.TestVO">
+		INSERT INTO test
+		(qno,
+		correct,
+		question,ex1,ex2,ex3,ex4)
+		VALUES(seq_test.nextval,#{correct},#{question},#{ex1},#{ex2},#{ex3},#{ex4})
+	</insert>
+
+	<select id="getAll" resultType="test.TestVO">
+		select * from(select * from test order by qno desc) where rownum <![CDATA[ <= ]]>10
+	</select>
+
+</mapper>

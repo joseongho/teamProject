@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="score">
+
+	<select id="getRank" resultType="score.ScoreVO">
+		SELECT * FROM(select * from member order by score desc) where rownum <![CDATA[ < ]]>
+		11
+	</select>
+
+	<select id="getScore" parameterType="score.ScoreVO" resultType="score.ScoreVO">
+		select * from member where id = #{id}
+	</select>
+
+</mapper>
